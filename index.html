@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript למתחילים - שיעור 6: פונקציות</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <div class="slideshow-container">
+        <div class="slide active">
+            <h1 class="title-main">JavaScript למתחילים</h1>
+            <p class="title-meta">תנאים · לולאות · Scope · פונקציות · שימושים אמיתיים</p>
+            <h2 class="title-sub">שיעור 6</h2>
+        </div>
+
+        <div class="slide">
+            <h2>מה נלמד היום? 📚</h2>
+            <p class="lead">היום נחבר את הכלים המרכזיים של JavaScript: תנאים, לוגיקה בוליאנית, לולאות, Scope ופונקציות. המטרה היא להבין איך בונים זרימת קוד מלאה ולא רק שורות בודדות.</p>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>נושא</th>
+                        <th>מה נתרגל בלייב</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>תנאים ולוגיקה</td>
+                        <td><code>if</code>, <code>else if</code>, <code>else</code>, <code>switch</code>, <code>&amp;&amp;</code>, <code>||</code>, <code>!</code></td>
+                    </tr>
+                    <tr>
+                        <td>לולאות וזרימה</td>
+                        <td><code>for</code>, <code>while</code>, <code>do...while</code>, <code>for...of</code>, <code>for...in</code>, <code>break</code>, <code>continue</code></td>
+                    </tr>
+                    <tr>
+                        <td>שילוב מעשי</td>
+                        <td>תנאים בתוך לולאות, תנאים מקוננים וסינון נתונים</td>
+                    </tr>
+                    <tr>
+                        <td>Scope</td>
+                        <td>Global, Function, Block, Shadowing ו־Closure בסיסי</td>
+                    </tr>
+                    <tr>
+                        <td>פונקציות</td>
+                        <td>Declaration, Expression, Arrow, <span class="term-ltr">return</span>, Callback, מערכים ואובייקטים</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="note console-note">
+                <h3>פותחים קונסול</h3>
+                <p>כל כפתור במצגת מדפיס גם לאזור הפלט וגם ל־<strong>Console</strong>. לחצו <strong>F12</strong> ובחרו בלשונית Console.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>מבנה מומלץ לשיעור של 3 שעות</h2>
+            <p class="lead">המצגת בנויה כך שאפשר לעצור אחרי כל נושא לדוגמה חיה, שאלה לכיתה ותרגול קצר. זה נותן זמן להבין את הקונספט לפני שממשיכים.</p>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>חלק</th>
+                        <th>זמן משוער</th>
+                        <th>מטרה</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>תנאים ולוגיקה</td>
+                        <td>35 דקות</td>
+                        <td>להבין איך הקוד מקבל החלטות</td>
+                    </tr>
+                    <tr>
+                        <td>לולאות ושליטה בזרימה</td>
+                        <td>40 דקות</td>
+                        <td>להבין איך חוזרים על פעולות ואיך עוצרים או מדלגים</td>
+                    </tr>
+                    <tr>
+                        <td>שילוב תנאים ולולאות</td>
+                        <td>25 דקות</td>
+                        <td>לפתור בעיות קטנות עם כמה כלים יחד</td>
+                    </tr>
+                    <tr>
+                        <td>פונקציות ו־Scope</td>
+                        <td>65 דקות</td>
+                        <td>לחלק קוד לפעולות ולהבין איפה משתנים קיימים</td>
+                    </tr>
+                    <tr>
+                        <td>תרגול מסכם</td>
+                        <td>15 דקות</td>
+                        <td>לחבר הכל לדוגמה אחת מלאה</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="slide">
+            <h2>תנאים: <span class="term-ltr">if</span>, <span class="term-ltr">else if</span>, <span class="term-ltr">else</span></h2>
+            <p class="lead">תנאי מאפשר לקוד לבחור מסלול פעולה לפי שאלה שהתשובה שלה היא <code>true</code> או <code>false</code>.</p>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">const grade = 82;
+
+if (grade >= 90) {
+    console.log("מצוין");
+} else if (grade >= 75) {
+    console.log("טוב מאוד");
+} else if (grade >= 60) {
+    console.log("עבר");
+} else {
+    console.log("צריך תרגול נוסף");
+}</code></pre>
+                <button class="run-btn" onclick="runDemo('ifElse')">הרץ תנאי</button>
+                <div class="output" id="output-ifElse"></div>
+            </div>
+            <div class="note">
+                <p>הבדיקה נעצרת בתנאי הראשון שמתקיים. לכן חשוב לסדר את התנאים מהספציפי לכללי.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>לוגיקה בוליאנית: <span class="term-ltr">&amp;&amp;</span>, <span class="term-ltr">||</span>, <span class="term-ltr">!</span></h2>
+            <p class="lead">לוגיקה בוליאנית מאפשרת לשלב כמה שאלות לתנאי אחד: וגם, או, ולא.</p>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">const age = 19;
+const hasTicket = true;
+const isBlocked = false;
+
+if (age >= 18 &amp;&amp; hasTicket &amp;&amp; !isBlocked) {
+    console.log("אפשר להיכנס לאירוע");
+}
+
+const isWeekend = false;
+const isHoliday = true;
+
+if (isWeekend || isHoliday) {
+    console.log("אין לימודים היום");
+}</code></pre>
+                <button class="run-btn" onclick="runDemo('booleanLogic')">הרץ לוגיקה</button>
+                <div class="output" id="output-booleanLogic"></div>
+            </div>
+            <div class="tip-grid">
+                <div class="tip-card"><strong><code>&amp;&amp;</code> AND</strong><span>כל התנאים חייבים להיות אמת. אם אחד מהם שקר, כל הביטוי שקר.</span></div>
+                <div class="tip-card"><strong><code>||</code> OR</strong><span>מספיק שתנאי אחד יהיה אמת. רק אם כולם שקר, כל הביטוי שקר.</span></div>
+                <div class="tip-card"><strong><code>!</code> NOT</strong><span>הופך אמת לשקר ושקר לאמת. שימושי לבדיקות כמו “לא חסום”.</span></div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>שערים לוגיים ב־JavaScript</h2>
+            <p class="lead">ב־JS יש שלושה אופרטורים בוליאניים בסיסיים: <code>&amp;&amp;</code>, <code>||</code>, <code>!</code>. מהם אפשר לבנות שערים לוגיים נוספים כמו XOR, NAND ו־NOR.</p>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>שער</th>
+                        <th>כתיבה ב־JS</th>
+                        <th>מתי יוצא true?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>AND</td>
+                        <td><code>a &amp;&amp; b</code></td>
+                        <td>רק כש־a וגם b הם true</td>
+                    </tr>
+                    <tr>
+                        <td>OR</td>
+                        <td><code>a || b</code></td>
+                        <td>כש־a או b הם true</td>
+                    </tr>
+                    <tr>
+                        <td>NOT</td>
+                        <td><code>!a</code></td>
+                        <td>כש־a הוא false</td>
+                    </tr>
+                    <tr>
+                        <td>XOR</td>
+                        <td><code>a !== b</code></td>
+                        <td>כשבדיוק אחד מהם true</td>
+                    </tr>
+                    <tr>
+                        <td>NAND</td>
+                        <td><code>!(a &amp;&amp; b)</code></td>
+                        <td>כל מצב חוץ משניהם true</td>
+                    </tr>
+                    <tr>
+                        <td>NOR</td>
+                        <td><code>!(a || b)</code></td>
+                        <td>רק כששניהם false</td>
+                    </tr>
+                    <tr>
+                        <td>XNOR</td>
+                        <td><code>a === b</code></td>
+                        <td>כששניהם אותו דבר: שניהם true או שניהם false</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="note">
+                <p><strong>חשוב:</strong> ב־JavaScript קיימים גם <code>&amp;</code>, <code>|</code>, <code>^</code>, <code>~</code>, אבל אלה אופרטורים ביטיים. לתנאים רגילים נשתמש ב־<code>&amp;&amp;</code>, <code>||</code>, <code>!</code>.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>שילובים של שערים לוגיים</h2>
+            <p class="lead">בפרויקטים אמיתיים כמעט תמיד משלבים כמה שערים יחד כדי לתאר חוק עסקי: מי יכול להיכנס, מתי להציג כפתור, או מתי פעולה מותרת.</p>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">const isLoggedIn = true;
+const isAdmin = false;
+const isEditor = true;
+const isBlocked = false;
+const hasPaid = true;
+
+// AND + OR + NOT
+const canEdit = isLoggedIn &amp;&amp; (isAdmin || isEditor) &amp;&amp; !isBlocked;
+
+// XOR - בדיוק אחד מהם נכון
+const hasOnlyOneRole = isAdmin !== isEditor;
+
+// NAND - לא שניהם ביחד
+const notAdminAndBlocked = !(isAdmin &amp;&amp; isBlocked);
+
+// NOR - אף אחד מהתנאים לא נכון
+const isGuest = !(isAdmin || isEditor);
+
+console.log("יכול לערוך:", canEdit);
+console.log("יש בדיוק תפקיד אחד:", hasOnlyOneRole);
+console.log("לא גם אדמין וגם חסום:", notAdminAndBlocked);
+console.log("אורח:", isGuest);
+console.log("יכול לקנות:", isLoggedIn &amp;&amp; hasPaid &amp;&amp; !isBlocked);</code></pre>
+                <button class="run-btn" onclick="runDemo('logicGates')">הרץ שערים לוגיים</button>
+                <div class="output" id="output-logicGates"></div>
+            </div>
+            <div class="warning-box">
+                <strong>סוגריים משנים משמעות:</strong> <code>a &amp;&amp; (b || c)</code> לא תמיד זהה ל־<code>(a &amp;&amp; b) || c</code>. כשיש שילובים, כותבים סוגריים בשביל קריאות ובטיחות.
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2><span class="term-ltr">switch</span> - תנאי עם הרבה אפשרויות</h2>
+            <p class="lead">כשבודקים משתנה אחד מול הרבה ערכים קבועים, <code>switch</code> יכול להיות קריא יותר מרצף ארוך של <code>else if</code>.</p>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">const role = "admin";
+
+switch (role) {
+    case "admin":
+        console.log("גישה מלאה למערכת");
+        break;
+    case "editor":
+        console.log("אפשר לערוך תוכן");
+        break;
+    case "viewer":
+        console.log("אפשר לצפות בלבד");
+        break;
+    default:
+        console.log("תפקיד לא מוכר");
+}</code></pre>
+                <button class="run-btn" onclick="runDemo('switchDemo')">הרץ switch</button>
+                <div class="output" id="output-switchDemo"></div>
+            </div>
+            <div class="warning-box">
+                <strong>זוכרים:</strong> בלי <code>break</code>, הקוד ממשיך ל־case הבא.
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>לולאות: <span class="term-ltr">for</span>, <span class="term-ltr">while</span>, <span class="term-ltr">do...while</span></h2>
+            <p class="lead">לולאות מריצות קוד כמה פעמים. בוחרים סוג לולאה לפי השאלה: יודעים כמה פעמים? לא יודעים מתי זה ייגמר? חייבים לרוץ לפחות פעם אחת?</p>
+            <div class="tip-grid">
+                <div class="tip-card">
+                    <strong><code>for</code></strong>
+                    <span>משתמשים כשבדרך כלל יודעים מראש כמה פעמים להריץ. צורת העבודה: יוצרים משתנה התחלתי, בודקים תנאי, מריצים את גוף הלולאה, מעדכנים את המשתנה וחוזרים שוב לבדיקה.</span>
+                </div>
+                <div class="tip-card">
+                    <strong><code>while</code></strong>
+                    <span>משתמשים כשלא יודעים מראש כמה חזרות יהיו. צורת העבודה: קודם בודקים תנאי, ואם הוא אמת מריצים את גוף הלולאה. בתוך הלולאה חייבים לשנות משהו כדי שהתנאי יהפוך בסוף לשקר.</span>
+                </div>
+                <div class="tip-card">
+                    <strong><code>do...while</code></strong>
+                    <span>משתמשים כשהקוד חייב לרוץ לפחות פעם אחת. צורת העבודה: קודם מריצים את גוף הלולאה, אחר כך בודקים תנאי, ואם הוא אמת חוזרים לעוד סיבוב.</span>
+                </div>
+            </div>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">for (let i = 1; i <= 3; i++) {
+    console.log(`for: ${i}`);
+}
+
+let count = 1;
+while (count <= 3) {
+    console.log(`while: ${count}`);
+    count++;
+}
+
+let answer;
+do {
+    answer = "yes";
+    console.log("do...while רץ לפחות פעם אחת");
+} while (answer !== "yes");</code></pre>
+                <button class="run-btn" onclick="runDemo('loopTypes')">הרץ לולאות</button>
+                <div class="output" id="output-loopTypes"></div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2><span class="term-ltr">for...of</span> ו־<span class="term-ltr">for...in</span></h2>
+            <p class="lead"><code>for...of</code> ו־<code>for...in</code> נראים דומים, אבל הם עונים על שאלות שונות: האם אני רוצה את <strong>הערכים עצמם</strong>, או את <strong>השמות של המפתחות</strong>?</p>
+            <div class="tip-grid">
+                <div class="tip-card">
+                    <strong><code>for...of</code></strong>
+                    <span>עובר על הערכים של מבנה שאפשר לעבור עליו לפי סדר, כמו מערך או מחרוזת. בכל סיבוב המשתנה מקבל את הערך עצמו: למשל <code>"HTML"</code>, ואז <code>"CSS"</code>.</span>
+                </div>
+                <div class="tip-card">
+                    <strong><code>for...in</code></strong>
+                    <span>עובר על המפתחות של אובייקט. בכל סיבוב המשתנה מקבל את שם המפתח כסטרינג, למשל <code>"name"</code>, ואז משתמשים ב־<code>user[key]</code> כדי להגיע לערך.</span>
+                </div>
+                <div class="tip-card">
+                    <strong><code>Object.entries()</code> + <code>for...of</code></strong>
+                    <span>השיטה המודרנית והנוחה לאובייקטים כשצריך גם מפתח וגם ערך יחד: <code>for (const [key, value] of Object.entries(user))</code>.</span>
+                </div>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>מבנה נתונים</th>
+                        <th>לולאה מומלצת</th>
+                        <th>מה מקבלים בכל סיבוב?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>מערך <span class="term-ltr">Array</span></td>
+                        <td><code>for...of</code></td>
+                        <td>את הערך עצמו: <code>"HTML"</code>, <code>"CSS"</code></td>
+                    </tr>
+                    <tr>
+                        <td>אובייקט <span class="term-ltr">Object</span></td>
+                        <td><code>for...in</code></td>
+                        <td>רק מפתחות כסטרינגים: <code>"name"</code>, <code>"role"</code></td>
+                    </tr>
+                    <tr>
+                        <td>אובייקט מודרני</td>
+                        <td><code>Object.entries()</code> + <code>for...of</code></td>
+                        <td>זוגות של מפתח וערך יחד: <code>[key, value]</code></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">const skills = ["HTML", "CSS", "JavaScript"];
+
+// מתאים למערכים - מקבלים ערכים
+for (const skill of skills) {
+    console.log(`מיומנות: ${skill}`);
+}
+
+const user = {
+    name: "נועה",
+    role: "student",
+    active: true
+};
+
+// מתאים לאובייקטים - מקבלים מפתחות
+for (const key in user) {
+    console.log(`${key}: ${user[key]}`);
+}
+
+// מודרני ונוח - מקבלים מפתח וערך יחד
+for (const [key, value] of Object.entries(user)) {
+    console.log(`הערך של ${key} הוא ${value}`);
+}</code></pre>
+                <button class="run-btn" onclick="runDemo('forInOf')">הרץ for...in/of</button>
+                <div class="output" id="output-forInOf"></div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2><span class="term-ltr">break</span> ו־<span class="term-ltr">continue</span></h2>
+            <p class="lead"><code>break</code> עוצר לולאה לגמרי. <code>continue</code> מדלג על הסיבוב הנוכחי וממשיך לסיבוב הבא.</p>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">for (let i = 1; i <= 8; i++) {
+    if (i === 3) {
+        console.log("מדלגים על 3");
+        continue;
+    }
+
+    if (i === 6) {
+        console.log("עוצרים ב-6");
+        break;
+    }
+
+    console.log(i);
+}</code></pre>
+                <button class="run-btn" onclick="runDemo('breakContinue')">הרץ שליטה בלולאה</button>
+                <div class="output" id="output-breakContinue"></div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>שילוב תנאים ולולאות</h2>
+            <p class="lead">רוב התרגילים האמיתיים משלבים כמה כלים: עוברים על נתונים, בודקים תנאי, ואז מחליטים מה לעשות.</p>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">const numbers = [4, 9, 12, 15, 22, 30];
+let sum = 0;
+
+for (const number of numbers) {
+    if (number % 3 === 0 &amp;&amp; number % 2 === 0) {
+        console.log(`${number} מתחלק גם ב-2 וגם ב-3`);
+        sum += number;
+    }
+}
+
+console.log("סכום:", sum);</code></pre>
+                <button class="run-btn" onclick="runDemo('combinedLogic')">הרץ שילוב</button>
+                <div class="output" id="output-combinedLogic"></div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Nested Conditions - תנאים מקוננים</h2>
+            <p class="lead">תנאי מקונן הוא תנאי בתוך תנאי. משתמשים בזה כשצריך לבדוק שלבים, אבל חשוב לא להעמיק יותר מדי כדי שהקוד יישאר קריא.</p>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">const user = {
+    isLoggedIn: true,
+    role: "admin",
+    hasTwoFactor: true
+};
+
+if (user.isLoggedIn) {
+    if (user.role === "admin") {
+        if (user.hasTwoFactor) {
+            console.log("כניסה מאושרת לאזור ניהול");
+        } else {
+            console.log("צריך אימות דו שלבי");
+        }
+    } else {
+        console.log("אין הרשאת ניהול");
+    }
+} else {
+    console.log("צריך להתחבר קודם");
+}</code></pre>
+                <button class="run-btn" onclick="runDemo('nestedConditions')">הרץ תנאים מקוננים</button>
+                <div class="output" id="output-nestedConditions"></div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>מה זה פונקציה?</h2>
+            <div class="concept-card">
+                <h3>פונקציה = קופסה של הוראות</h3>
+                <p>במקום לכתוב את אותו קוד כמה פעמים, נותנים לו שם ומפעילים אותו מתי שצריך.</p>
+            </div>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">function sayHello() {
+    console.log("שלום כיתה!");
+    console.log("ברוכים הבאים לשיעור פונקציות");
+}
+
+sayHello();
+sayHello();</code></pre>
+                <button class="run-btn" onclick="runDemo('basic')">הרץ דוגמה</button>
+                <div class="output" id="output-basic"></div>
+            </div>
+            <div class="tip-grid">
+                <div class="tip-card"><strong>שם</strong><span>מסביר מה הפונקציה עושה</span></div>
+                <div class="tip-card"><strong>גוף</strong><span>הקוד שרץ כשקוראים לפונקציה</span></div>
+                <div class="tip-card"><strong>קריאה</strong><span><code>sayHello()</code> מפעיל את הקוד</span></div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>פרמטרים וארגומנטים</h2>
+            <p class="lead">פרמטרים מאפשרים לפונקציה לקבל מידע מבחוץ. כך אותה פונקציה יכולה לעבוד בכל פעם עם ערכים אחרים.</p>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">function introduceStudent(name, age, grade) {
+    console.log(`שם: ${name}`);
+    console.log(`גיל: ${age}`);
+    console.log(`ציון אחרון: ${grade}`);
+}
+
+introduceStudent("נועה", 16, 95);
+introduceStudent("דניאל", 17, 88);</code></pre>
+                <button class="run-btn" onclick="runDemo('parameters')">הרץ דוגמה</button>
+                <div class="output" id="output-parameters"></div>
+            </div>
+            <div class="note">
+                <p><strong>פרמטר</strong> הוא השם בתוך ההגדרה של הפונקציה. <strong>ארגומנט</strong> הוא הערך ששולחים בזמן הקריאה.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2><span class="term-ltr">return</span> - להחזיר תוצאה</h2>
+            <p class="lead">לא כל פונקציה צריכה רק להדפיס. הרבה פעמים נרצה שהיא תחזיר ערך כדי שנוכל לשמור אותו, לחשב איתו או להעביר אותו לפונקציה אחרת.</p>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">function calculateVat(price) {
+    return price * 0.17;
+}
+
+function finalPrice(price) {
+    return price + calculateVat(price);
+}
+
+const productPrice = 100;
+console.log("מע״מ:", calculateVat(productPrice));
+console.log("מחיר סופי:", finalPrice(productPrice));</code></pre>
+                <button class="run-btn" onclick="runDemo('return')">הרץ דוגמה</button>
+                <div class="output" id="output-return"></div>
+            </div>
+            <div class="warning-box">
+                <strong>חשוב:</strong> קוד שנמצא אחרי <code>return</code> באותה פונקציה לא ירוץ.
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>סוגי פונקציות ב־JS</h2>
+            <div class="function-types">
+                <div class="fact-item">
+                    <strong>Function Declaration</strong>
+                    <pre><code class="language-javascript">function add(a, b) {
+    return a + b;
+}</code></pre>
+                </div>
+                <div class="fact-item">
+                    <strong>Function Expression</strong>
+                    <pre><code class="language-javascript">const multiply = function(a, b) {
+    return a * b;
+};</code></pre>
+                </div>
+                <div class="fact-item">
+                    <strong>Arrow Function</strong>
+                    <pre><code class="language-javascript">const divide = (a, b) => a / b;</code></pre>
+                </div>
+            </div>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">function add(a, b) {
+    return a + b;
+}
+
+const multiply = function(a, b) {
+    return a * b;
+};
+
+const divide = (a, b) => a / b;
+
+console.log("חיבור:", add(5, 3));
+console.log("כפל:", multiply(5, 3));
+console.log("חילוק:", divide(12, 3));</code></pre>
+                <button class="run-btn" onclick="runDemo('types')">הרץ את שלושת הסוגים</button>
+                <div class="output" id="output-types"></div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>פונקציות קצרות עם Arrow</h2>
+            <p class="lead">Arrow functions נוחות במיוחד לפעולות קצרות, למשל חישובים קטנים או עבודה עם מערכים.</p>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">const double = num => num * 2;
+const isAdult = age => age >= 18;
+const createMessage = name => `שלום ${name}, בהצלחה בשיעור!`;
+
+console.log(double(7));
+console.log(isAdult(20));
+console.log(createMessage("מאיה"));</code></pre>
+                <button class="run-btn" onclick="runDemo('arrow')">הרץ דוגמה</button>
+                <div class="output" id="output-arrow"></div>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>מקרה</th>
+                        <th>תחביר מקוצר</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>פרמטר אחד</td>
+                        <td><code>num => num * 2</code></td>
+                    </tr>
+                    <tr>
+                        <td>החזרה מיידית</td>
+                        <td>בלי <code>return</code> ובלי סוגריים מסולסלים</td>
+                    </tr>
+                    <tr>
+                        <td>כמה שורות</td>
+                        <td>משתמשים ב־<code>{}</code> וב־<code>return</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="slide">
+            <h2>פונקציה בתוך תנאים ולולאות</h2>
+            <p class="lead">כשנותנים שם ללוגיקה, קל להשתמש בה שוב בתוך לולאות ותנאים.</p>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">function isEven(num) {
+    return num % 2 === 0;
+}
+
+for (let i = 1; i <= 10; i++) {
+    if (isEven(i)) {
+        console.log(`${i} הוא מספר זוגי`);
+    }
+}</code></pre>
+                <button class="run-btn" onclick="runDemo('conditions')">הרץ דוגמה</button>
+                <div class="output" id="output-conditions"></div>
+            </div>
+            <div class="question-box">
+                <h3>שאלה לכיתה</h3>
+                <p>למה עדיף לקרוא לפונקציה <code>isEven</code> במקום לכתוב בכל מקום <code>num % 2 === 0</code>?</p>
+                <button class="answer-btn" onclick="toggleAnswer('even-name')">הצג תשובה</button>
+                <div class="answer-box" id="answer-even-name">
+                    <p>כי השם מסביר את הכוונה, ואם הלוגיקה משתנה בעתיד משנים אותה במקום אחד בלבד.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>פונקציות עם מערכים</h2>
+            <p class="lead">פונקציה יכולה לקבל מערך, לעבור עליו, לבנות מערך חדש ולהחזיר תוצאה נקייה.</p>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">function getPassingGrades(grades) {
+    const passing = [];
+
+    for (let i = 0; i < grades.length; i++) {
+        if (grades[i] >= 60) {
+            passing.push(grades[i]);
+        }
+    }
+
+    return passing;
+}
+
+console.log(getPassingGrades([100, 55, 78, 42, 91]));</code></pre>
+                <button class="run-btn" onclick="runDemo('arrays')">הרץ דוגמה</button>
+                <div class="output" id="output-arrays"></div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>פונקציות עם אובייקטים</h2>
+            <p class="lead">בפרויקטים אמיתיים מעבירים הרבה פעמים אובייקט שלם לפונקציה, ולא עשרה פרמטרים נפרדים.</p>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">function printUserCard(user) {
+    console.log("----- כרטיס משתמש -----");
+    console.log(`שם: ${user.name}`);
+    console.log(`תפקיד: ${user.role}`);
+    console.log(`פעיל: ${user.isActive ? "כן" : "לא"}`);
+}
+
+const user = {
+    name: "אלכס",
+    role: "Frontend Developer",
+    isActive: true
+};
+
+printUserCard(user);</code></pre>
+                <button class="run-btn" onclick="runDemo('objects')">הרץ דוגמה</button>
+                <div class="output" id="output-objects"></div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Callback - פונקציה שמקבלת פונקציה</h2>
+            <p class="lead">ב־JavaScript פונקציה היא ערך. לכן אפשר לשלוח פונקציה לפונקציה אחרת, ולהחליט מבחוץ מה יקרה בפנים.</p>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">function runOperation(a, b, operation) {
+    const result = operation(a, b);
+    console.log(`התוצאה היא: ${result}`);
+}
+
+const add = (x, y) => x + y;
+const power = (x, y) => x ** y;
+
+runOperation(4, 3, add);
+runOperation(4, 3, power);</code></pre>
+                <button class="run-btn" onclick="runDemo('callback')">הרץ Callback</button>
+                <div class="output" id="output-callback"></div>
+            </div>
+            <div class="note">
+                <p>הרעיון הזה יופיע הרבה בהמשך עם אירועים, מערכים ופעולות אסינכרוניות.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>חיבור אלמנטים מ־HTML ל־JavaScript</h2>
+            <p class="lead">כדי ש־JavaScript ישפיע על הדף, קודם צריך “לתפוס” אלמנט מה־HTML. בדרך כלל עושים את זה עם <code>id</code>, ואז אפשר לקרוא ערכים, להגיב ללחיצות ולהחליף קלאסים של CSS.</p>
+            <div class="interactive-code">
+                <pre><code class="language-html">&lt;input id="userName" value="נועה"&gt;
+&lt;button id="helloBtn"&gt;הצג ברכה&lt;/button&gt;
+&lt;p id="message" class="message"&gt;&lt;/p&gt;</code></pre>
+                <pre><code class="language-css">.message.success {
+    color: white;
+    background: teal;
+    padding: 12px;
+}</code></pre>
+                <pre><code class="language-javascript">const input = document.getElementById("userName");
+const button = document.getElementById("helloBtn");
+const message = document.getElementById("message");
+
+button.addEventListener("click", function() {
+    const name = input.value;
+    message.textContent = `שלום ${name}!`;
+    message.classList.add("success");
+    console.log(message.textContent);
+});</code></pre>
+                <button class="run-btn" onclick="runDemo('domConnect')">הרץ הסבר DOM</button>
+                <div class="output" id="output-domConnect"></div>
+            </div>
+            <div class="tip-grid">
+                <div class="tip-card"><strong>1. הזנת נתונים</strong><span>קוראים ערך משדה עם <code>input.value</code>.</span></div>
+                <div class="tip-card"><strong>2. הצגה בדף</strong><span>כותבים תוצאה חזרה ל־HTML עם <code>textContent</code>.</span></div>
+                <div class="tip-card"><strong>3. החלפת קלאסים</strong><span>משנים עיצוב דרך CSS עם <code>classList.add</code>, <code>remove</code> או <code>toggle</code>.</span></div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Scope - איפה המשתנה קיים?</h2>
+            <p class="lead">משתנה שמוגדר בתוך פונקציה חי בתוך הפונקציה. מבחוץ הוא לא מוכר.</p>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">let globalMessage = "אני גלובלי";
+
+function showScope() {
+    let localMessage = "אני מקומי";
+    console.log(globalMessage);
+    console.log(localMessage);
+}
+
+showScope();
+console.log("מחוץ לפונקציה אפשר להשתמש ב-globalMessage");
+// console.log(localMessage); // יגרום לשגיאה</code></pre>
+                <button class="run-btn" onclick="runDemo('scope')">הרץ דוגמה</button>
+                <div class="output" id="output-scope"></div>
+            </div>
+            <div class="warning-box">
+                <strong>כלל אצבע:</strong> משתנה צריך להיות מוגדר במקום הכי קטן שבו באמת צריכים אותו.
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Global, Function ו־Block Scope</h2>
+            <p class="lead">ב־JavaScript יש כמה “אזורים” שבהם משתנים חיים. ההבדל בין <code>let</code>, <code>const</code> ו־<code>var</code> חשוב במיוחד בתוך בלוקים ופונקציות.</p>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">const appName = "Grade App"; // Global scope
+
+function checkGrade(grade) {
+    const message = "בודקים ציון"; // Function scope
+    console.log(appName);
+    console.log(message);
+
+    if (grade >= 60) {
+        const status = "עבר"; // Block scope
+        console.log(status);
+    }
+
+    // console.log(status); // שגיאה: status קיים רק בתוך ה-if
+}
+
+checkGrade(88);</code></pre>
+                <button class="run-btn" onclick="runDemo('blockScope')">הרץ Scope</button>
+                <div class="output" id="output-blockScope"></div>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>סוג Scope</th>
+                        <th>איפה נוצר?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Global</td>
+                        <td>מחוץ לכל פונקציה או בלוק</td>
+                    </tr>
+                    <tr>
+                        <td>Function</td>
+                        <td>בתוך פונקציה</td>
+                    </tr>
+                    <tr>
+                        <td>Block</td>
+                        <td>בתוך <code>{}</code> עם <code>let</code> או <code>const</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="slide">
+            <h2>Scope Chain ו־Shadowing</h2>
+            <p class="lead">כשמשתנה לא נמצא באזור הקרוב, JavaScript מחפש אותו החוצה. אם יש משתנה פנימי עם אותו שם, הוא “מסתיר” את החיצוני.</p>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">const userName = "גלובלי";
+
+function outer() {
+    const userName = "בתוך outer";
+
+    function inner() {
+        const userName = "בתוך inner";
+        console.log(userName);
+    }
+
+    inner();
+    console.log(userName);
+}
+
+outer();
+console.log(userName);</code></pre>
+                <button class="run-btn" onclick="runDemo('scopeChain')">הרץ Scope Chain</button>
+                <div class="output" id="output-scopeChain"></div>
+            </div>
+            <div class="note">
+                <p><strong>Shadowing</strong> לא תמיד טעות, אבל בכיתה נעדיף שמות ברורים כדי לא לבלבל בין משתנים באזורים שונים.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>פונקציה שזוכרת משתנה - Closure בסיסי</h2>
+            <p class="lead">Closure קורה כשפונקציה פנימית ממשיכה להשתמש במשתנים של פונקציה חיצונית, גם אחרי שהפונקציה החיצונית סיימה לרוץ.</p>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">function createCounter() {
+    let count = 0;
+
+    return function() {
+        count++;
+        console.log(`הספירה עכשיו: ${count}`);
+    };
+}
+
+const counter = createCounter();
+counter();
+counter();
+counter();</code></pre>
+                <button class="run-btn" onclick="runDemo('closure')">הרץ Closure</button>
+                <div class="output" id="output-closure"></div>
+            </div>
+            <div class="warning-box">
+                <strong>לא צריך לשלוט בזה לעומק עדיין:</strong> מספיק להבין שפונקציות יכולות “לזכור” משתנים מהסביבה שבה הן נוצרו.
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>תרגול מסכם בלייב</h2>
+            <p class="lead">נבנה פונקציות קטנות, ואז נחבר אותן לפתרון אחד.</p>
+            <div class="interactive-code">
+                <pre><code class="language-javascript">function getAverage(numbers) {
+    let sum = 0;
+
+    for (let i = 0; i < numbers.length; i++) {
+        sum += numbers[i];
+    }
+
+    return sum / numbers.length;
+}
+
+function getStatus(average) {
+    if (average >= 90) return "מצוין";
+    if (average >= 75) return "טוב מאוד";
+    if (average >= 60) return "עבר";
+    return "צריך תרגול נוסף";
+}
+
+const grades = [80, 92, 71, 88];
+const average = getAverage(grades);
+
+console.log("ממוצע:", average);
+console.log("סטטוס:", getStatus(average));</code></pre>
+                <button class="run-btn" onclick="runDemo('practice')">הרץ תרגול</button>
+                <div class="output" id="output-practice"></div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>הצגת ערכים חזרה בתוך ה־HTML</h2>
+            <p class="lead">אחרי שקוד JS מחשב ערך, אפשר להציג אותו בדף בעזרת <code>textContent</code>, <code>innerHTML</code> או שינוי <code>value</code> של שדה.</p>
+            <div class="interactive-code">
+                <pre><code class="language-html">&lt;input id="nameInput" value="נועה"&gt;
+&lt;p id="message"&gt;&lt;/p&gt;</code></pre>
+                <pre><code class="language-javascript">const input = document.getElementById("nameInput");
+const message = document.getElementById("message");
+
+message.textContent = `שלום ${input.value}, ברוכה הבאה!`;
+console.log(message.textContent);</code></pre>
+                <button class="run-btn" onclick="runDemo('domOutput')">הרץ הצגת ערך</button>
+                <div class="output" id="output-domOutput"></div>
+            </div>
+            <div class="warning-box">
+                <strong>טיפ:</strong> כשמציגים טקסט רגיל נעדיף <code>textContent</code>. את <code>innerHTML</code> שומרים למקרים שבהם באמת צריך להכניס HTML.
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>שינוי עיצוב וקלאסים של אלמנטים</h2>
+            <p class="lead">JavaScript יכול לשנות איך אלמנט נראה: או דרך <code>style</code> לשינוי ישיר, או דרך <code>classList</code> כדי להוסיף ולהוריד קלאסים מוגדרים ב־CSS.</p>
+            <div class="interactive-code">
+                <pre><code class="language-html">&lt;div id="card" class="card"&gt;כרטיס משתמש&lt;/div&gt;</code></pre>
+                <pre><code class="language-css">.card.active {
+    background: orange;
+    color: white;
+}</code></pre>
+                <pre><code class="language-javascript">const card = document.getElementById("card");
+
+card.style.border = "3px solid teal";
+card.classList.add("active");
+card.classList.toggle("highlight");
+
+console.log("העיצוב והקלאסים עודכנו");</code></pre>
+                <button class="run-btn" onclick="runDemo('domStyleClass')">הרץ שינוי עיצוב</button>
+                <div class="output" id="output-domStyleClass"></div>
+            </div>
+            <div class="note">
+                <p>בפרויקטים אמיתיים עדיף לרוב לשנות קלאסים עם <code>classList</code>, כי העיצוב נשאר מסודר בקובץ CSS.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>דוגמה קצרה: מחשבון HTML + JS</h2>
+            <p class="lead">בדוגמה הזו ה־HTML נותן שדות וכפתורים, וה־JavaScript קורא את הערכים, מחשב ומחזיר את התוצאה לתוך הדף.</p>
+            <div class="interactive-code">
+                <pre><code class="language-html">&lt;input id="num1" type="number" value="10"&gt;
+&lt;input id="num2" type="number" value="5"&gt;
+
+&lt;button onclick="calculate('+')"&gt;+&lt;/button&gt;
+&lt;button onclick="calculate('-')"&gt;-&lt;/button&gt;
+&lt;button onclick="calculate('*')"&gt;*&lt;/button&gt;
+&lt;button onclick="calculate('/')"&gt;/&lt;/button&gt;
+
+&lt;p id="result"&gt;התוצאה תופיע כאן&lt;/p&gt;</code></pre>
+                <pre><code class="language-javascript">function calculate(operator) {
+    const num1 = Number(document.getElementById("num1").value);
+    const num2 = Number(document.getElementById("num2").value);
+    const result = document.getElementById("result");
+    let answer;
+
+    if (operator === "+") answer = num1 + num2;
+    else if (operator === "-") answer = num1 - num2;
+    else if (operator === "*") answer = num1 * num2;
+    else if (operator === "/") answer = num2 !== 0 ? num1 / num2 : "אי אפשר לחלק באפס";
+
+    result.textContent = `תוצאה: ${answer}`;
+    console.log(result.textContent);
+}</code></pre>
+                <button class="run-btn" onclick="runDemo('calculatorDom')">הרץ מחשבון לדוגמה</button>
+                <div class="output" id="output-calculatorDom"></div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>שיעורי בית</h2>
+            <div class="homework-grid">
+                <div class="exercise-box">
+                    <h3>1. בדיקת הרשאות</h3>
+                    <p>כתבו תנאי שמשתמש ב־<code>if</code>, <code>&amp;&amp;</code>, <code>||</code> ו־<code>!</code> כדי לבדוק אם משתמש יכול להיכנס למערכת.</p>
+                </div>
+                <div class="exercise-box">
+                    <h3>2. תפריט עם switch</h3>
+                    <p>כתבו <code>switch</code> שמקבל פעולה כמו <code>"save"</code>, <code>"delete"</code>, <code>"edit"</code> ומדפיס הודעה מתאימה.</p>
+                </div>
+                <div class="exercise-box">
+                    <h3>3. סינון מספרים</h3>
+                    <p>כתבו לולאה שמדפיסה רק מספרים זוגיים שמתחלקים גם ב־3. השתמשו ב־<code>continue</code> כדי לדלג על מספרים לא מתאימים.</p>
+                </div>
+                <div class="exercise-box">
+                    <h3>4. מעבר על אובייקט</h3>
+                    <p>צרו אובייקט משתמש והדפיסו את כל המפתחות והערכים שלו בעזרת <code>for...in</code>.</p>
+                </div>
+                <div class="exercise-box">
+                    <h3>5. מחשבון קטן</h3>
+                    <p>כתבו פונקציות <code>add</code>, <code>subtract</code>, <code>multiply</code>, <code>divide</code> שמחזירות תוצאה ומדפיסות אותה לקונסול.</p>
+                </div>
+                <div class="exercise-box">
+                    <h3>6. בדיקת משתמש</h3>
+                    <p>כתבו פונקציה שמקבלת אובייקט משתמש ומחזירה אם הוא יכול להיכנס: גיל 18+ וגם <code>isActive === true</code>.</p>
+                </div>
+                <div class="exercise-box">
+                    <h3>7. מערך ציונים</h3>
+                    <p>כתבו פונקציה שמקבלת מערך ציונים ומחזירה אובייקט עם ממוצע, ציון גבוה וציון נמוך.</p>
+                </div>
+                <div class="exercise-box">
+                    <h3>8. Callback</h3>
+                    <p>כתבו פונקציה שמקבלת מערך ופונקציית בדיקה, ומדפיסה רק את הערכים שעוברים את הבדיקה.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>סיכום</h2>
+            <ul class="summary-list">
+                <li>תנאים מאפשרים לקוד לבחור מסלול בעזרת <code>if</code>, <code>else if</code>, <code>else</code> ו־<code>switch</code>.</li>
+                <li>לוגיקה בוליאנית מחברת תנאים עם <code>&amp;&amp;</code>, <code>||</code> ו־<code>!</code>, ומהם בונים גם XOR, NAND, NOR ו־XNOR.</li>
+                <li>לולאות מאפשרות לחזור על פעולה עם <code>for</code>, <code>while</code>, <code>do...while</code>, <code>for...of</code> ו־<code>for...in</code>.</li>
+                <li><code>break</code> עוצר לולאה ו־<code>continue</code> מדלג לסיבוב הבא.</li>
+                <li>פונקציה נותנת שם לקוד שאפשר להפעיל שוב.</li>
+                <li>פרמטרים מאפשרים לשלוח מידע לפונקציה.</li>
+                <li><span class="term-ltr">return</span> מחזיר תוצאה להמשך שימוש.</li>
+                <li>יש כמה דרכים להגדיר פונקציות: Declaration, Expression, Arrow.</li>
+                <li>פונקציות משתלבות עם תנאים, לולאות, מערכים, אובייקטים ו־Callbacks.</li>
+                <li>Scope קובע איפה משתנים ופונקציות קיימים ואיפה אפשר להשתמש בהם.</li>
+                <li>DOM מחבר בין HTML ל־JavaScript: תופסים אלמנטים, קוראים ערכים, מציגים תוצאות ומשנים עיצוב וקלאסים.</li>
+            </ul>
+            <div class="final-message">
+                <h3>עכשיו מתחילים לחשוב כמו מפתחים 🎉</h3>
+                <p>קוד טוב הוא קוד שמחולק לפעולות קטנות וברורות.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">❮</button>
+        <span class="slide-counter" id="slideCounter">1 / 33</span>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">❯</button>
+    </div>
+
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        if (typeof Prism !== 'undefined') {
+            setTimeout(() => Prism.highlightAll(), 100);
+        }
+    </script>
+</body>
+</html>
